@@ -1,16 +1,13 @@
 import Vue from "vue"
 import Router from "vue-router"
-import Home from "@views/Home.vue"
-import Login from "@views/auth/Login.vue"
-import Users from "@views/accounts/Users.vue"
-import User from "@views/accounts/User.vue"
-import NewUser from "@views/accounts/NewUser.vue"
-import Roles from "@views/accounts/Roles.vue"
-import Role from "@views/accounts/Role.vue"
-import NewRole from "@views/accounts/NewRole.vue"
-import Tenants from "@views/accounts/Tenants.vue"
-import Tenant from "@views/accounts/Tenant.vue"
-import NewTenant from "@views/accounts/NewTenant.vue"
+import Home from "@/views/Home.vue"
+import Login from "@/views/auth/Login.vue"
+import Users from "@/views/accounts/Users.vue"
+import UserId from "@/views/accounts/UserId.vue"
+import NewUser from "@/views/accounts/NewUser.vue"
+import Tenants from "@/views/accounts/Tenants.vue"
+import TenantId from "@/views/accounts/TenantId.vue"
+import NewTenant from "@/views/accounts/NewTenant.vue"
 
 Vue.use(Router)
 
@@ -19,35 +16,43 @@ export default new Router({
     routes: [
         {
             path: "/",
-            component: Home
+            component: Home,
+            name: "home"
         },
         {
             path: "/auth/login",
-            component: Login
+            component: Login,
+            name: "login"
         },
         {
-            path: "/accounts/users",
+            path: "/admin/users/",
             component: Users,
-            children: [
-                { path: ":id", User },
-                { path: "new", NewUser }
-            ]
+            name: "users",
         },
         {
-            path: "accounts/roles",
-            component: Roles,
-            children: [
-                { path: ":id", Role },
-                { path: "new", NewRole }
-            ]
+            path: "/admin/users/new",
+            component: NewUser,
+            name: "new-user",
         },
         {
-            path: "accounts/tenants",
+            path: "/admin/tenants",
             component: Tenants,
-            children: [
-                { path: ":id", Tenant },
-                { path: "new", NewTenant }
-            ]
+            name: "tenants"
+        },
+        {
+            path: "/admin/tenants/new",
+            component: NewTenant,
+            name: "new-tenants",
+        },
+        {
+            path: "/accounts/users/:id",
+            component: UserId,
+            name: "user-id",
+        },
+        {
+            path: "/accounts/tenants/:1",
+            component: TenantId,
+            name: "tenant-id"
         },
     ]
 })

@@ -2,7 +2,7 @@
   <v-app>
     <AppBar></AppBar>
     <v-main>
-      <h1>NewUser</h1>
+      <h1>UserId</h1>
     </v-main>
   </v-app>
 </template>
