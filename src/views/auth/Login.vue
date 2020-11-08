@@ -15,27 +15,25 @@
           </div>
         </v-row>
         <v-card width="400px" class="mx-auto mt-5">
-          <v-card-title>
-            <v-row justify="center" align-content="center">
-              <h1 class="display-1">Login</h1>
-            </v-row>
-          </v-card-title>
           <v-card-text>
             <v-form>
               <v-text-field
                 prepend-icon="mdi-account-circle"
                 label="username"
+                v-model="username"
               />
               <v-text-field
                 prepend-icon="mdi-lock"
-                :append-icon="password.icon"
+                :append-icon="passState.icon"
                 @click:append="changeShowPassword"
-                :type="password.type"
+                @keyup.enter.native="login"
+                :type="passState.type"
+                v-model="password"
                 label="password"
               />
               <v-card-actions>
                 <v-row justify="center" align-content="center">
-                  <v-btn color="primary">Login</v-btn>
+                  <v-btn color="primary" @click="login">Login</v-btn>
                 </v-row>
               </v-card-actions>
             </v-form>
@@ -50,7 +48,9 @@
 export default {
   data() {
     return {
-      password: {
+      username: "",
+      password: "",
+      passState: {
         isShowPassword: false,
         type: "password",
         icon: "mdi-eye-off",
@@ -59,14 +59,21 @@ export default {
   },
   methods: {
     changeShowPassword() {
-      this.password.isShowPassword = !this.password.isShowPassword;
-      if (this.password.isShowPassword) {
-        this.password.type = "text";
-        this.password.icon = "mdi-eye";
+      this.passState.isShowPassword = !this.passState.isShowPassword;
+      if (this.passState.isShowPassword) {
+        this.passState.type = "text";
+        this.passState.icon = "mdi-eye";
       } else {
-        this.password.type = "password";
-        this.password.icon = "mdi-eye-off";
+        this.passState.type = "password";
+        this.passState.icon = "mdi-eye-off";
       }
+    },
+    login() {
+      this.$store.dispatch("login", {
+        username: this.username,
+        password: this.password,
+      });
+      this.username = "";
     },
   },
 };

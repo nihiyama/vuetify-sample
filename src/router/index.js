@@ -8,6 +8,7 @@ import NewUser from "@/views/accounts/NewUser.vue"
 import Tenants from "@/views/accounts/Tenants.vue"
 import TenantId from "@/views/accounts/TenantId.vue"
 import NewTenant from "@/views/accounts/NewTenant.vue"
+import store from "@/store"
 
 Vue.use(Router)
 
@@ -17,42 +18,98 @@ export default new Router({
         {
             path: "/",
             component: Home,
-            name: "home"
+            name: "home",
+            beforeEnter(to, from, next) {
+                if (store.getters.jwtToken) {
+                    next();
+                } else {
+                    next('/auth/login')
+                }
+            }
         },
         {
             path: "/auth/login",
             component: Login,
-            name: "login"
+            name: "login",
+            beforeEnter(to, from, next) {
+                if (store.getters.jwtToken) {
+                    next('/');
+                } else {
+                    next()
+                }
+            }
         },
         {
             path: "/admin/users/",
             component: Users,
             name: "users",
+            beforeEnter(to, from, next) {
+                if (store.getters.jwtToken) {
+                    next();
+                } else {
+                    next('/auth/login')
+                }
+            }
         },
         {
             path: "/admin/users/new",
             component: NewUser,
             name: "new-user",
+            beforeEnter(to, from, next) {
+                if (store.getters.jwtToken) {
+                    next();
+                } else {
+                    next('/auth/login')
+                }
+            }
         },
         {
             path: "/admin/tenants",
             component: Tenants,
-            name: "tenants"
+            name: "tenants",
+            beforeEnter(to, from, next) {
+                if (store.getters.jwtToken) {
+                    next();
+                } else {
+                    next('/auth/login')
+                }
+            }
         },
         {
             path: "/admin/tenants/new",
             component: NewTenant,
-            name: "new-tenants",
+            name: "new-tenant",
+            beforeEnter(to, from, next) {
+                if (store.getters.jwtToken) {
+                    next();
+                } else {
+                    next('/auth/login')
+                }
+            },
         },
         {
             path: "/accounts/users/:id",
             component: UserId,
             name: "user-id",
+            beforeEnter(to, from, next) {
+                if (store.getters.jwtToken) {
+                    next();
+                } else {
+                    next('/auth/login')
+                }
+            }
         },
         {
-            path: "/accounts/tenants/:1",
+            path: "/accounts/tenants/:id",
             component: TenantId,
-            name: "tenant-id"
+            name: "tenant-id",
+            beforeEnter(to, from, next) {
+                if (store.getters.jwtToken) {
+                    next();
+                } else {
+                    next('/auth/login')
+                }
+            }
         },
     ]
 })

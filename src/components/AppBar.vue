@@ -14,49 +14,44 @@
 
     <v-spacer></v-spacer>
 
-    <span class="pr-2 text-h5">User: </span>
-
-    <template v-slot:extension>
-      <v-btn text large color="white" @click="toHome"> Home </v-btn>
-      <v-menu transition="slide-y-transition" bottom offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn text large color="white" v-bind="attrs" v-on="on">
-            Administration
-          </v-btn>
-        </template>
-        <v-list dense nav>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-subtitle v-html="'User'"></v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item
-            v-for="(item, i) in items"
-            :key="i"
-            link
-            @click="toItems(item.viewName)"
-          >
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-        <v-divider></v-divider>
-        <v-list dense nav>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-subtitle v-html="'Admin'"></v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item
-            v-for="(item, i) in adminItems"
-            :key="i"
-            link
-            @click="toAdminItems(item.viewName)"
-          >
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </template>
+    <v-menu transition="slide-y-transition" bottom offset-y>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn text large color="white" v-bind="attrs" v-on="on">
+          hogehoge
+        </v-btn>
+      </template>
+      <v-list dense nav>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-subtitle v-html="'User'"></v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item
+          v-for="(item, i) in items"
+          :key="i"
+          link
+          @click="toItems(item.viewName)"
+        >
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+      <v-divider></v-divider>
+      <v-list dense nav>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-subtitle v-html="'Admin'"></v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item
+          v-for="(item, i) in adminItems"
+          :key="i"
+          link
+          @click="toAdminItems(item.viewName)"
+        >
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
   </v-app-bar>
 </template>
 
@@ -65,7 +60,11 @@ export default {
   name: "App",
 
   data: () => ({
-    items: [{ title: "Change Password", viewName: "user-id" }],
+    items: [
+      { title: "To Home", viewName: "home" },
+      { title: "Change Password", viewName: "user-id" },
+      { title: "Logout", viewName: "login" },
+    ],
     adminItems: [
       { title: "User Administoration", viewName: "users" },
       { title: "Tenant Administoration", viewName: "tenants" },
@@ -79,10 +78,14 @@ export default {
       });
     },
     toItems(viewName) {
-      this.$router.push({
-        name: viewName,
-        params: { id: 1 },
-      });
+      if (viewName == "login") {
+        this.$store.dispatch("logout");
+      } else {
+        this.$router.push({
+          name: viewName,
+          params: { id: 1 },
+        });
+      }
     },
     toAdminItems(viewName) {
       this.$router.push({

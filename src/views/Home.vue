@@ -131,7 +131,6 @@
 
           <!-- データテーブル -->
           <v-data-table
-            :loading="'false'"
             :headers="headers"
             :items="desserts"
             :search="search"
@@ -144,6 +143,7 @@
 
 <script>
 import XLSX from "xlsx";
+import _ from "lodash";
 
 import AppBar from "@/components/AppBar.vue";
 
@@ -317,11 +317,16 @@ export default {
   components: { AppBar },
   methods: {
     onExport() {
-      const dataWS = XLSX.utils.json_to_sheet(this.desserts);
+      const header = this.headers.map((h) => [h.value, h.text]);
+      const convHeader = _.fromPairs(header);
+      const data = this.desserts.map((e) =>
+        _.mapKeys(e, (v, k) => convHeader[k])
+      );
+      console.log(data);
+      const dataWS = XLSX.utils.json_to_sheet(data);
       const wb = XLSX.utils.book_new();
-
       XLSX.utils.book_append_sheet(wb, dataWS, "data");
-      XLSX.writeFile(wb, "filename.xlsx");
+      XLSX.writeFile(wb, "filename.csv");
     },
   },
 };
