@@ -13,7 +13,17 @@
       </v-container>
 
       <!-- データテーブル -->
-      <v-data-table :loading="'false'" :headers="headers" :items="datas">
+      <v-data-table :headers="headers" :items="datas">
+        <template v-slot:[`item.tenants`]="{ item }">
+          <v-chip
+            class="ma-1"
+            small
+            v-for="tenant in item.tenants"
+            :key="tenant"
+          >
+            {{ tenant }}
+          </v-chip>
+        </template>
         <template v-slot:[`item.operations`]="{ item }">
           <v-icon class="mr-2" @click="toEdit(item)"> mdi-pencil </v-icon>
           <v-icon class="mr-2" @click="remove(item)"> mdi-delete </v-icon>

@@ -25,6 +25,7 @@ export default {
         { text: "User", value: "user" },
         { text: "Username", value: "username" },
         { text: "Administrator", value: "admin" },
+        { text: "Tenants", value: "tenants" },
         { text: "Updated at", value: "updatedAt" },
         { text: "Operations", value: "operations" },
       ],
@@ -34,6 +35,7 @@ export default {
           user: "hogehoge",
           username: "hogehoge",
           admin: true,
+          tenants: ["foo", "bar", "hoge", "fuga"],
           updatedAt: "2020/10/29",
         },
         {
@@ -41,6 +43,7 @@ export default {
           user: "fugafuga",
           username: "fugafuga",
           admin: false,
+          tenants: ["fuga"],
           updatedAt: "2020/10/29",
         },
         {
@@ -48,6 +51,7 @@ export default {
           user: "foo",
           username: "bar",
           admin: false,
+          tenants: ["foo", "bar"],
           updatedAt: "2020/10/29",
         },
       ],

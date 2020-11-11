@@ -16,8 +16,15 @@
 
     <v-menu transition="slide-y-transition" bottom offset-y>
       <template v-slot:activator="{ on, attrs }">
-        <v-btn text large color="white" v-bind="attrs" v-on="on">
-          hogehoge
+        <v-btn
+          class="text-none"
+          text
+          large
+          color="white"
+          v-bind="attrs"
+          v-on="on"
+        >
+          {{ username }}
         </v-btn>
       </template>
       <v-list dense nav>
@@ -36,7 +43,7 @@
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
-      <v-list dense nav>
+      <v-list dense nav v-if="isAdmin">
         <v-list-item>
           <v-list-item-content>
             <v-list-item-subtitle v-html="'Admin'"></v-list-item-subtitle>
@@ -60,6 +67,8 @@ export default {
   name: "App",
 
   data: () => ({
+    username: "",
+    isAdmin: false,
     items: [
       { title: "To Home", viewName: "home" },
       { title: "Change Password", viewName: "user-id" },
@@ -70,27 +79,37 @@ export default {
       { title: "Tenant Administoration", viewName: "tenants" },
     ],
   }),
-
+  created() {
+    this.username = this.$store.getters.loginUser.username;
+    this.isAdmin = this.$store.getters.loginUser.admin;
+  },
   methods: {
     toHome() {
-      this.$router.push({
-        name: "home",
-      });
+      console.log(this.$router.path);
+      if (this.$router.path != this.$router.resolve({ name: "home" }.href)) {
+        this.$router.push({
+          name: "home",
+        });
+      }
     },
     toItems(viewName) {
       if (viewName == "login") {
         this.$store.dispatch("logout");
       } else {
-        this.$router.push({
-          name: viewName,
-          params: { id: 1 },
-        });
+        if (this.$route.name != viewName) {
+          this.$router.push({
+            name: viewName,
+            params: { id: 1 },
+          });
+        }
       }
     },
     toAdminItems(viewName) {
-      this.$router.push({
-        name: viewName,
-      });
+      if (this.$route.name != viewName) {
+        this.$router.push({
+          name: viewName,
+        });
+      }
     },
   },
 };
