@@ -8,6 +8,7 @@
         :datas="datas"
         :newPage="'new-tenant'"
         :editPage="'tenant-id'"
+        :deleteAction="'deleteTenant'"
       ></List>
     </v-main>
   </v-app>
@@ -22,32 +23,28 @@ export default {
     return {
       headers: [
         { text: "ID", value: "id" },
-        { text: "Tenant Name", value: "tenantName" },
-        { text: "Updated at", value: "updatedAt" },
+        { text: "Tenant Name", value: "name" },
         { text: "Operations", value: "operations" },
       ],
-      datas: [
-        {
-          id: 1,
-          tenantName: "hogehoge",
-          updatedAt: "2020/10/29",
-        },
-        {
-          id: 2,
-          tenantName: "fugafuga",
-          updatedAt: "2020/10/29",
-        },
-        {
-          id: 3,
-          tenantName: "foo",
-          updatedAt: "2020/10/29",
-        },
-      ],
+      datas: [],
     };
   },
   components: {
     AppBar,
     List,
+  },
+  created() {
+    this.$store.dispatch("getTenants").then(() => {
+      this.datas = this.$store.getters.tenants;
+    });
+  },
+  mounted() {
+    this.$store.watch(
+      (state, getters) => getters.tenants,
+      (newVal) => {
+        this.datas = newVal;
+      }
+    );
   },
 };
 </script>

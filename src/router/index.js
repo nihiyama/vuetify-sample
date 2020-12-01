@@ -4,6 +4,7 @@ import Home from "@/views/Home.vue"
 import Login from "@/views/auth/Login.vue"
 import Users from "@/views/accounts/Users.vue"
 import UserId from "@/views/accounts/UserId.vue"
+import UserMe from "@/views/accounts/UserMe.vue"
 import NewUser from "@/views/accounts/NewUser.vue"
 import Tenants from "@/views/accounts/Tenants.vue"
 import TenantId from "@/views/accounts/TenantId.vue"
@@ -88,7 +89,7 @@ export default new Router({
             },
         },
         {
-            path: "/accounts/users/:id",
+            path: "/admin/users/:id",
             component: UserId,
             name: "user-id",
             beforeEnter(to, from, next) {
@@ -100,9 +101,21 @@ export default new Router({
             }
         },
         {
-            path: "/accounts/tenants/:id",
+            path: "/admin/tenants/:id",
             component: TenantId,
             name: "tenant-id",
+            beforeEnter(to, from, next) {
+                if (store.getters.jwtToken) {
+                    next();
+                } else {
+                    next('/auth/login')
+                }
+            }
+        },
+        {
+            path: "/accounts/users/me",
+            component: UserMe,
+            name: "user-me",
             beforeEnter(to, from, next) {
                 if (store.getters.jwtToken) {
                     next();

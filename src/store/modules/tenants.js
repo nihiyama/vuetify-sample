@@ -1,48 +1,94 @@
-import router from "@/router"
+import axios from "axios"
 
 const state = {
-    userInfo: {
-        id: null,
-        user: "",
-        username: "",
-        admin: false,
-        updatedAt: ""
-    },
-    usersInfo: []
+  tenant: {
+    id: null,
+    name: "",
+  },
+  tenants: []
 }
 
 const getters = {
-    userInfo: state => state.userInfo,
-    usersInfo: state => state.userInfo
+  tenant: state => state.tenant,
+  tenants: state => state.tenants
 }
 
 const mutations = {
-    updateUserInfo(state, userInfo) {
-        state.userInfo = userInfo
-    },
-    updateUsersInfo(state, usersInfo) {
-        state.usersInfo = usersInfo
-    }
+  updateTenant(state, tenant) {
+    state.tenant = tenant
+  },
+  updateTenants(state, tenants) {
+    state.tenants = tenants
+  }
 }
 
 const actions = {
-    getUser({ commit }, userInfo) {
-
-    },
-    createUser({ commit }, userInfo) {
-
-    },
-    updateUser({ commit }, userInfo) {
-
-    },
-    deleteUser({ commit }, userInfo) {
-
-    }
+  async getTenant({ commit }, id) {
+    await axios
+      .get(`/tenants/${id}`)
+      .then(response => {
+        commit("updateTenant", response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  async getTenants({ commit }) {
+    await axios
+      .get('/tenants/')
+      .then(response => {
+        commit("updateTenants", response.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  async deleteTenant({ dispatch }, id) {
+    await axios
+      .delete(`/tenants/${id}`)
+      .then(response => {
+        if (response.status == 200) {
+          console.log("success")
+        }
+        dispatch("getTenants")
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  async createTenant({ dispatch }, tenant) {
+    await axios
+      .post("/tenants/", tenant)
+      .then(response => {
+        if (response.status == 200) {
+          console.log("success")
+        }
+        dispatch("getTenants")
+      }
+      )
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  async updateTenant({ dispatch }, tenant) {
+    await axios
+      .put(`/tenants/${tenant.id}`, tenant)
+      .then(response => {
+        if (response.status == 200) {
+          console.log("success")
+        }
+        dispatch("getTenants")
+      }
+      )
+      .catch(error => {
+        console.log(error)
+      })
+  }
 }
 
 export default {
-    state,
-    getters,
-    mutations,
-    actions
+  state,
+  getters,
+  mutations,
+  actions
 }

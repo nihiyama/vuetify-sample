@@ -177,10 +177,10 @@ export default {
       desserts: [],
     };
   },
-  created() {
-    this.tenants = this.$store.getters.loginUser.tenants;
-  },
   components: { AppBar },
+  created() {
+    this.tenants = this.$store.getters.me.tenants;
+  },
   methods: {
     onRefer() {
       const sleep = (time) =>

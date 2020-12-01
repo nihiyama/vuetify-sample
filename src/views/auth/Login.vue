@@ -74,6 +74,7 @@ export default {
         password: this.password,
       });
       this.username = "";
+      this.password = "";
     },
   },
 };

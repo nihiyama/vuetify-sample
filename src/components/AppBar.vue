@@ -5,8 +5,8 @@
         alt="Vuetify Logo"
         class="shrink mr-2"
         contain
-        src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-        transition="scale-transition"
+        transition="false"
+        :src="require('../assets/vuetify-logo-dark.png')"
         width="40"
       />
       <span class="font-weight-medium text-h4 pl-5">HogeHoge</span>
@@ -24,7 +24,7 @@
           v-bind="attrs"
           v-on="on"
         >
-          {{ username }}
+          {{ me.name }}
         </v-btn>
       </template>
       <v-list dense nav>
@@ -43,7 +43,7 @@
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
-      <v-list dense nav v-if="isAdmin">
+      <v-list dense nav v-if="me.isSuperuser">
         <v-list-item>
           <v-list-item-content>
             <v-list-item-subtitle v-html="'Admin'"></v-list-item-subtitle>
@@ -64,14 +64,13 @@
 
 <script>
 export default {
-  name: "App",
+  name: "AppBar",
 
   data: () => ({
-    username: "",
-    isAdmin: false,
+    me: {},
     items: [
       { title: "To Home", viewName: "home" },
-      { title: "Change Password", viewName: "user-id" },
+      { title: "Change Password", viewName: "user-me" },
       { title: "Logout", viewName: "login" },
     ],
     adminItems: [
@@ -80,8 +79,7 @@ export default {
     ],
   }),
   created() {
-    this.username = this.$store.getters.loginUser.username;
-    this.isAdmin = this.$store.getters.loginUser.admin;
+    this.me = this.$store.getters.me;
   },
   methods: {
     toHome() {
