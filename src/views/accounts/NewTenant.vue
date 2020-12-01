@@ -2,17 +2,29 @@
   <v-app>
     <AppBar></AppBar>
     <v-main>
-      <h1>NewTenant</h1>
+      <TenantForm
+        :title="title"
+        :tenant="tenant"
+        :execType="'create'"
+      ></TenantForm>
     </v-main>
   </v-app>
 </template>
 
 <script>
 import AppBar from "@/components/AppBar.vue";
+import TenantForm from "@/components/TenantForm.vue";
 
 export default {
+  data: () => ({
+    title: "NewTenant",
+    tenant: {
+      name: "",
+    },
+  }),
   components: {
     AppBar,
+    TenantForm,
   },
 };
 </script>

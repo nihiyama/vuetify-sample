@@ -1,49 +1,149 @@
-import router from "@/router"
+import axios from "axios"
+
 
 const state = {
-    userInfo: {
-        id: null,
-        user: "",
-        username: "",
-        admin: false,
-        tenants: [],
-        updatedAt: ""
-    },
-    usersInfo: []
+  me: {
+    name: "",
+    isSuperuser: false,
+    id: 0,
+    tenants: [],
+  },
+  user: {
+    name: "",
+    isSuperuser: false,
+    id: 0,
+    tenants: [],
+  },
+  users: [],
 }
 
 const getters = {
-    userInfo: state => state.userInfo,
-    usersInfo: state => state.userInfo
+  me: state => state.me,
+  user: state => state.user,
+  users: state => state.users
 }
 
 const mutations = {
-    updateUserInfo(state, userInfo) {
-        state.userInfo = userInfo
-    },
-    updateUsersInfo(state, usersInfo) {
-        state.usersInfo = usersInfo
-    }
+  updateMe(state, me) {
+    state.me = me
+  },
+  updateUser(state, user) {
+    state.user = user
+  },
+  updateUsers(state, users) {
+    state.users = users
+  },
 }
 
 const actions = {
-    getUser({ commit }, userInfo) {
-
-    },
-    createUser({ commit }, userInfo) {
-
-    },
-    updateUser({ commit }, userInfo) {
-
-    },
-    deleteUser({ commit }, userInfo) {
-
-    }
+  async getMe({ commit }) {
+    await axios
+      .get('/users/me')
+      .then(response => {
+        const user = Object.assign(
+          response.data,
+          { tenants: response.data.tenants.map(tenant => tenant.name) }
+        )
+        commit('updateMe', user)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  async getUsers({ commit }) {
+    await axios
+      .get('/users/')
+      .then(response => {
+        const users = response.data.map(user =>
+          Object.assign(
+            user,
+            { tenants: user.tenants.map(tenant => tenant.name) }
+          )
+        )
+        commit('updateUsers', users)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  async getUser({ commit }, id) {
+    await axios
+      .get(`/users/${id}`)
+      .then(response => {
+        const user = Object.assign(
+          response.data,
+          { tenants: response.data.tenants.map(tenant => tenant.name) }
+        )
+        commit('updateUser', user)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  async deleteUser({ dispatch }, id) {
+    await axios
+      .delete(`/users/${id}`)
+      .then(response => {
+        if (response.status == 200) {
+          console.log("success")
+        }
+        dispatch("getUsers")
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  async createUser({ dispatch }, user) {
+    await axios
+      .post("/users/", user)
+      .then(response => {
+        if (response.status == 200) {
+          console.log("success")
+        }
+        dispatch("getUsers")
+      }
+      )
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  async updateMe({ dispatch }, user) {
+    await axios
+      .put("/users/me", "\"" + user.password + "\"", {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => {
+        if (response.status == 200) {
+          console.log("success")
+        }
+        dispatch("getUsers")
+      }
+      )
+      .catch(error => {
+        console.log(error)
+      })
+  },
+  async updateUser({ dispatch }, user) {
+    await axios
+      .put(`/users/${user.id}`, user)
+      .then(response => {
+        if (response.status == 200) {
+          console.log("success")
+        }
+        dispatch("getUsers")
+      }
+      )
+      .catch(error => {
+        console.log(error)
+      })
+  }
 }
 
 export default {
-    state,
-    getters,
-    mutations,
-    actions
+  state,
+  getters,
+  mutations,
+  actions
 }
